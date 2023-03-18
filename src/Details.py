@@ -5,14 +5,14 @@ JSAN_DETAILS_BOX = "7.Io6YTe,7.fontBodyMedium"
 
 
 def details(driver, box):
-    detailsPageLink = box.find("a", jstcache="81").get("href")
-    name = box.find("span", jstcache="128").text
-
+    detailsPageLink = box.find("a").get("href")
     sleep(3)
 
     driver.get(detailsPageLink)
 
     detailsPage = BeautifulSoup(driver.page_source, "html.parser")
+
+    name = detailsPage.select_one(".fontHeadlineLarge").text
     detailsList = detailsPage.findAll("div", jsan=JSAN_DETAILS_BOX)
 
     address = ""
@@ -27,11 +27,6 @@ def details(driver, box):
 
     isRelavant = True if phone else False
 
-    result = {
-        "nome": name,
-        "endereço": address,
-        "telefone": phone,
-        "isRelavant": isRelavant
-    }
+    result = [name, address, phone, isRelavant]
 
     return result
